@@ -15,9 +15,6 @@ class Music
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $artist = null;
-
     #[ORM\Column]
     private ?int $year = null;
 
@@ -27,6 +24,13 @@ class Music
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'musics')]
     private Collection $playlists;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
+    #[ORM\ManyToOne(inversedBy: 'musics')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Artist $artist = null;
+
     public function __construct()
     {
         $this->playlists = new ArrayCollection();
@@ -35,18 +39,6 @@ class Music
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getArtist(): ?string
-    {
-        return $this->artist;
-    }
-
-    public function setArtist(string $artist): self
-    {
-        $this->artist = $artist;
-
-        return $this;
     }
 
     public function getYear(): ?int
@@ -96,6 +88,30 @@ class Music
         if ($this->playlists->removeElement($playlist)) {
             $playlist->removeMusic($this);
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getArtist(): ?Artist
+    {
+        return $this->artist;
+    }
+
+    public function setArtist(?Artist $artist): self
+    {
+        $this->artist = $artist;
 
         return $this;
     }

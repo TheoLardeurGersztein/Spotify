@@ -18,6 +18,9 @@ class Album
     #[ORM\OneToMany(mappedBy: 'album', targetEntity: Music::class)]
     private Collection $musics;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->musics = new ArrayCollection();
@@ -54,6 +57,18 @@ class Album
                 $music->setAlbum(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

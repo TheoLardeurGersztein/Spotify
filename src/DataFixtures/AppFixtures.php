@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Music;
 use App\Entity\Artist;
+use App\Entity\Album;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -11,22 +12,24 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
 
-        $TheResistance = ['Uprising','Resistance','Undisclosed Desires','United States of Eurasia','Guiding Lights','Unnatural Selection','MK Ultra','I Belong to You','Exogenesis : symphony'];
+        $theResistanceMusics = ['Uprising','Resistance','Undisclosed Desires','United States of Eurasia','Guiding Lights','Unnatural Selection','MK Ultra','I Belong to You','Exogenesis : symphony'];
         
+        $theResistance = new Album();
+        $theResistance->setName('The Resistance');
+        $manager->persist($theResistance);
 
-        $artist = new Artist();
-        $artist->setName('Muse');
-        $manager->persist($artist);
+        $muse = new Artist();
+        $muse->setName('Muse');
+        $manager->persist($muse);
 
 
-        foreach ($TheResistance as $title) {
+        foreach ($theResistanceMusics as $title) {
             $music = new Music();
             $music->setTitle($title);
-            $music->setArtist($artist);
+            $music->setArtist($muse);
             $music->setYear(2009);
+            $music->setAlbum($theResistance);
             $manager->persist($music);
         }
         

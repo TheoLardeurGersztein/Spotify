@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Music;
 use App\Entity\Artist;
 use App\Entity\Album;
+use App\Entity\Playlist;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -23,6 +24,10 @@ class AppFixtures extends Fixture
         $muse->setName('Muse');
         $manager->persist($muse);
 
+        $favMusics = new Playlist();
+        $favMusics->setName('Favorite Musics');
+        $manager->persist($favMusics);
+
 
         foreach ($theResistanceMusics as $title) {
             $music = new Music();
@@ -30,8 +35,13 @@ class AppFixtures extends Fixture
             $music->setArtist($muse);
             $music->setYear(2009);
             $music->setAlbum($theResistance);
+            $music->addPlaylist($favMusics);
             $manager->persist($music);
         }
+
+        
+
+        
         
 
         $manager->flush();

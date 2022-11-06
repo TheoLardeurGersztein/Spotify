@@ -18,6 +18,9 @@ class Playlist
     #[ORM\ManyToMany(targetEntity: Music::class, inversedBy: 'playlists')]
     private Collection $musics;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->musics = new ArrayCollection();
@@ -48,6 +51,18 @@ class Playlist
     public function removeMusic(Music $music): self
     {
         $this->musics->removeElement($music);
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

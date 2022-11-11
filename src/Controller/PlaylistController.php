@@ -13,34 +13,16 @@ class PlaylistController extends AbstractController
 
     /**
     * Controleur Playlist
-    * @Route("/playlist")
+    * @Route("/playlist", name = "playlists")
     */
 
     public function index(ManagerRegistry $doctrine): Response
     {
-        $htmlpage = '<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Welcome!</title>
-    </head>
-    <body>
-        <h1>Liste des Playlists</h1>';
-
         $entityManager= $doctrine->getManager();
         $playlists = $entityManager->getRepository(Playlist::class)->findAll();
-        foreach($playlists as $playlist) {
-           $htmlpage .= '<li>
-            <a href="/playlist/'.$playlist->getid().'">'.$playlist->getName().'</a></li>';
-         }
-        $htmlpage .= '</ul>';
-
-        $htmlpage .= '</body></html>';
-
-        return new Response(
-            $htmlpage,
-            Response::HTTP_OK,
-            array('content-type' => 'text/html')
+    
+        return $this->render('playlist/index.html.twig',
+            [ 'playlists' => $playlists ]
             );
     }
 
@@ -54,26 +36,13 @@ class PlaylistController extends AbstractController
      */
     public function show(ManagerRegistry $doctrine, $id)
     {
-        $playlistRepo = $doctrine->getRepository(Playlist::class);
-        $playlist = $playlistRepo->find($id);
+    $playlists = $doctrine->getRepository(Playlist::class);
+    $playlist = $playlists->find($id);
+    $musics = $playlist->getMusics();
 
-        if (!$playlist) {
-            throw $this->createNotFoundException('The Playlist does not exist');
-        }
-
-        $res = '<h1>' . $playlist->getName() . '<h1> <ul>';
-
-        $musics = $playlist->getMusics();
-        foreach($musics as $music) {
-            $res .= '<li>' . $music->getTitle();
-        }
-
-        $res .= '<ul>';
-
-        //$res .= '<p/><a href="' . $this->generateUrl('playlist_index') . '">Back</a>';
-
-        return new Response('<html><body>'. $res . '</body></html>');
+    return $this->render('playlist/show.html.twig',
+     [ 'musics' => $musics, 'playlist' => $playlist ]
+     );
     }
-
     
 }

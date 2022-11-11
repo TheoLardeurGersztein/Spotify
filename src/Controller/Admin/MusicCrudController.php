@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Music;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class MusicCrudController extends AbstractCrudController
 {
@@ -12,14 +13,12 @@ class MusicCrudController extends AbstractCrudController
         return Music::class;
     }
 
-    /*
+    
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield 'title';
+        yield 'year';
+        yield AssociationField::new('artist')->setCrudController(ArtistCrudController::class);
     }
-    */
+    
 }

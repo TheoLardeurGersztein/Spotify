@@ -36,6 +36,14 @@ class Music
         $this->playlists = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    public function __toString() 
+    {
+        return $this->title;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

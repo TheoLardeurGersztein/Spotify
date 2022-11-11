@@ -14,19 +14,14 @@ class PlaylistCrudController extends AbstractCrudController
     }
 
     
-    //public function configureFields(string $pageName): iterable
-    //{
+    public function configureFields(string $pageName): iterable
+    {
         
-        //yield AssociationField::new('...')->setCrudController(MusicCrudController::class);
+        yield 'name';
+        yield AssociationField::new('musics')->setCrudController(MusicCrudController::class);
         
-        /*
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-        */
-    //}
+        
+    }
 
     
 }

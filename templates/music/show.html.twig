@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {% block main %}
+      <h1>Details</h1>
+
+
+      <table class="table">
+          <tbody>
+              <tr>
+                  <th>Title</th>
+                  <td>{{ music.title }}</td>
+              </tr>
+              <tr>
+                  <th>Artist</th>
+                  <td>{{ music.artist }}</td>
+              </tr>
+              <tr>
+                  <th>Year</th>
+                  <td>{{ music.year }}</td>
+              </tr>
+          </tbody>
+      </table>
+           
+      <a href="{{ path('musics') }}">back to list</a>
+
+  {% endblock %}
+{% endblock %}

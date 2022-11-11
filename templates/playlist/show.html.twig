@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {% block main %}
+      <h1>{{ playlist.name }}</h1>
+
+
+      <table class="table">
+          <tbody>
+          {% set i = 1 %}
+          {% for music in musics %}
+              <tr>
+                  <th>{{ i }}</th>
+                  <td>{{ music.title }}</td>
+                  <td><a href="{{ path('music_show', {'id': music.id}) }}">show</a></td>
+              </tr>
+              {% set i = i+1 %}
+            {% endfor %} {# todos #}
+          </tbody>
+      </table>
+           
+      <a href="{{ path('playlists') }}">back to list</a>
+
+  {% endblock %}
+{% endblock %}

@@ -26,6 +26,14 @@ class Artist
         $this->musics = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    public function __toString() 
+    {
+        return $this->Name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

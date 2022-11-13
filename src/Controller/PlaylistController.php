@@ -26,6 +26,8 @@ class PlaylistController extends AbstractController
             );
     }
 
+
+    
     /**
      * Show a Playlist
      * 

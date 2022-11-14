@@ -31,9 +31,13 @@ class Music
     #[ORM\JoinColumn(nullable: false)]
     private ?Artist $artist = null;
 
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'music')]
+    private Collection $genres;
+
     public function __construct()
     {
         $this->playlists = new ArrayCollection();
+        $this->genres = new ArrayCollection();
     }
 
     /**
@@ -120,6 +124,30 @@ class Music
     public function setArtist(?Artist $artist): self
     {
         $this->artist = $artist;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): self
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres->add($genre);
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): self
+    {
+        $this->genres->removeElement($genre);
 
         return $this;
     }

@@ -14,6 +14,11 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
 
+        $favMusics = new Playlist();
+        $favMusics->setName('Favorite Musics');
+        $manager->persist($favMusics);
+
+        
         $theResistanceMusics = ['Uprising','Resistance','Undisclosed Desires','United States of Eurasia','Guiding Lights','Unnatural Selection','MK Ultra','I Belong to You','Exogenesis : symphony'];
         
         $theResistance = new Album();
@@ -24,9 +29,7 @@ class AppFixtures extends Fixture
         $muse->setName('Muse');
         $manager->persist($muse);
 
-        $favMusics = new Playlist();
-        $favMusics->setName('Favorite Musics');
-        $manager->persist($favMusics);
+
 
 
         foreach ($theResistanceMusics as $title) {

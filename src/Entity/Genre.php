@@ -21,27 +21,19 @@ class Genre
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'sudGenre')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subGenre')]
     private ?self $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
-    private Collection $sudGenre;
+    private Collection $subGenre;
 
-    #[ORM\ManyToMany(targetEntity: Music::class, mappedBy: 'genre')]
+    #[ORM\ManyToMany(targetEntity: Music::class, mappedBy: 'genres')]
     private Collection $music;
 
     public function __construct()
     {
-        $this->sudGenre = new ArrayCollection();
+        $this->subGenre = new ArrayCollection();
         $this->music = new ArrayCollection();
-    }
-    
-    /**
-     * @return string
-     */
-    public function __toString() 
-    {
-        return $this->label;
     }
 
     public function getId(): ?int
@@ -88,27 +80,27 @@ class Genre
     /**
      * @return Collection<int, self>
      */
-    public function getSudGenre(): Collection
+    public function getSubGenre(): Collection
     {
-        return $this->sudGenre;
+        return $this->subGenre;
     }
 
-    public function addSudGenre(self $sudGenre): self
+    public function addSubGenre(self $subGenre): self
     {
-        if (!$this->sudGenre->contains($sudGenre)) {
-            $this->sudGenre->add($sudGenre);
-            $sudGenre->setParent($this);
+        if (!$this->subGenre->contains($subGenre)) {
+            $this->subGenre->add($subGenre);
+            $subGenre->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeSudGenre(self $sudGenre): self
+    public function removeSubGenre(self $subGenre): self
     {
-        if ($this->sudGenre->removeElement($sudGenre)) {
+        if ($this->subGenre->removeElement($subGenre)) {
             // set the owning side to null (unless already changed)
-            if ($sudGenre->getParent() === $this) {
-                $sudGenre->setParent(null);
+            if ($subGenre->getParent() === $this) {
+                $subGenre->setParent(null);
             }
         }
 

@@ -1,0 +1,10 @@
+bootstrap_menu:
+  menus:
+    main:
+      items:
+        playlist:
+          label: 'Playlists'
+          route: 'playlists'
+        music:
+          label: 'Musics'
+          route: 'musics'

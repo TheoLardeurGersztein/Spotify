@@ -21,9 +21,20 @@ class Playlist
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'playlists')]
+    private ?Membre $membre = null;
+
     public function __construct()
     {
         $this->musics = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString() 
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -63,6 +74,18 @@ class Playlist
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getMembre(): ?Membre
+    {
+        return $this->membre;
+    }
+
+    public function setMembre(?Membre $membre): self
+    {
+        $this->membre = $membre;
 
         return $this;
     }

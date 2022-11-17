@@ -2,18 +2,18 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Music;
+use App\Entity\Membre;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
-class MusicCrudController extends AbstractCrudController
+class MembreCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Music::class;
+        return Membre::class;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -24,19 +24,18 @@ class MusicCrudController extends AbstractCrudController
     ;
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
-        'title',
-        'year',
-        AssociationField::new('artist')->setCrudController(ArtistCrudController::class),
-        AssociationField::new('genres') 
-            ->onlyOnDetail()
-            ->formatValue(function ($value, $entity) {
-            return implode(', ', $entity->getGenres()->toArray()); 
-            })
-        ];    
+            'nom',
+            AssociationField::new('playlists')->setCrudController(PlaylistCrudController::class),
+            AssociationField::new('playlists')
+                  ->onlyOnDetail()
+                  ->setTemplatePath('admin/fields/membre_playlist.html.twig')
+
+        ];
+        
+        
     }
-    
 }

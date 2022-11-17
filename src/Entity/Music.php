@@ -34,10 +34,14 @@ class Music
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'music')]
     private Collection $genres;
 
+    #[ORM\ManyToMany(targetEntity: SharedPlaylist::class, mappedBy: 'musics')]
+    private Collection $sharedPlaylists;
+
     public function __construct()
     {
         $this->playlists = new ArrayCollection();
         $this->genres = new ArrayCollection();
+        $this->sharedPlaylists = new ArrayCollection();
     }
 
     /**
@@ -148,6 +152,33 @@ class Music
     public function removeGenre(Genre $genre): self
     {
         $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SharedPlaylist>
+     */
+    public function getSharedPlaylists(): Collection
+    {
+        return $this->sharedPlaylists;
+    }
+
+    public function addSharedPlaylist(SharedPlaylist $sharedPlaylist): self
+    {
+        if (!$this->sharedPlaylists->contains($sharedPlaylist)) {
+            $this->sharedPlaylists->add($sharedPlaylist);
+            $sharedPlaylist->addMusic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharedPlaylist(SharedPlaylist $sharedPlaylist): self
+    {
+        if ($this->sharedPlaylists->removeElement($sharedPlaylist)) {
+            $sharedPlaylist->removeMusic($this);
+        }
 
         return $this;
     }

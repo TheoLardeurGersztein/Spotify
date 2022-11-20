@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SharedPlaylist index{% endblock %}
+
+{% block body %}
+    <h1>SharedPlaylist index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Published</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for shared_playlist in shared_playlists %}
+            <tr>
+                <td>{{ shared_playlist.id }}</td>
+                <td>{{ shared_playlist.description }}</td>
+                <td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_shared_playlist_show', {'id': shared_playlist.id}) }}">show</a>
+                    <a href="{{ path('app_shared_playlist_edit', {'id': shared_playlist.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_shared_playlist_new') }}">Create new</a>
+{% endblock %}

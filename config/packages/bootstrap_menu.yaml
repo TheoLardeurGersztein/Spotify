@@ -4,7 +4,7 @@ bootstrap_menu:
       items:
         playlist:
           label: 'Playlists'
-          route: 'playlists'
+          route: 'app_playlist_index'
         music:
           label: 'Musics'
-          route: 'musics'
+          route: 'app_music_index'

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SharedPlaylist{% endblock %}
+
+{% block body %}
+    <h1>Edit SharedPlaylist</h1>
+
+    {{ include('shared_playlist/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_shared_playlist_index') }}">back to list</a>
+
+    {{ include('shared_playlist/_delete_form.html.twig') }}
+{% endblock %}

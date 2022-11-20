@@ -25,7 +25,7 @@
 							<th>{{ i }}</th>
 							<td>{{ music.title }}</td>
 							<td>
-								<a href="{{ path('app_music_show', {'id': music.id}) }}">show</a>
+								<a href="{{ path('app_playlist_music_show', {'playlist_id': playlist.id, 'music_id' : music.id}) }}">{{ music }}</a>
 							</td>
 						</tr>
 						{% set i = i+1 %}
@@ -36,7 +36,7 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_playlist_index') }}">back to list</a>
+	<a href="{{ path('app_membre_index') }}">bato list</a>
 
 	<a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">edit</a>
 

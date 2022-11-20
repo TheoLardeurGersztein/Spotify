@@ -5,10 +5,14 @@ namespace App\Controller;
 use App\Entity\Playlist;
 use App\Form\PlaylistType;
 use App\Repository\PlaylistRepository;
+use App\Entity\Membre;
+use App\Entity\Music;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 #[Route('/playlist')]
 class PlaylistController extends AbstractController
@@ -21,22 +25,26 @@ class PlaylistController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_playlist_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PlaylistRepository $playlistRepository): Response
+    /**
+    * @Route("/new/{id}", name="app_playlist_new", methods={"GET", "POST"})
+    */
+    public function new(Request $request, PlaylistRepository $playlistRepository, Membre $membre): Response
     {
         $playlist = new Playlist();
+        $playlist->setMembre($membre);
         $form = $this->createForm(PlaylistType::class, $playlist);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $playlistRepository->save($playlist, true);
 
-            return $this->redirectToRoute('app_playlist_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_membre_show', ['id' => $membre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('playlist/new.html.twig', [
             'playlist' => $playlist,
             'form' => $form,
+            'membre' => $membre,
         ]);
     }
 
@@ -74,6 +82,19 @@ class PlaylistController extends AbstractController
             $playlistRepository->remove($playlist, true);
         }
 
-        return $this->redirectToRoute('app_playlist_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_membre_show', ['id' => $membre.getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/{playlist_id}/music/{music_id}", name="app_playlist_music_show", methods={"GET"})
+     * @ParamConverter("playlist", options={"id" = "playlist_id"})
+     * @ParamConverter("music", options={"id" = "music_id"})
+     */
+    public function musicShow(Playlist $playlist, Music $music): Response
+    {
+        return $this->render('playlist/music_show.html.twig', [
+            'music' => $music,
+            'playlist' => $playlist
+        ]);
     }
 }

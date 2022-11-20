@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre
+{% endblock %}
+
+{% block body %}
+	<h1>Membre</h1>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ membre.id }}</td>
+			</tr>
+			<tr>
+				<th>Nom</th>
+				<td>{{ membre.nom }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ membre.description }}</td>
+			</tr>
+			<tr>
+				<th>Playlists</th>
+				<td>
+					{% for playlist in membre.playlists %}
+						<li>
+							<a href="{{ path('app_playlist_show', {'id' : playlist.id}) }}">{{ playlist }}</a>
+						</li>
+					{% endfor %}
+				</td>
+			</tr>
+            <tr>
+				<th>SHARED Playlists</th>
+				<td>
+					{% for playlist in membre.sharedPlaylists %}
+						<li>
+							<a href="{{ path('app_shared_playlist_show', {'id' : playlist.id}) }}">{{ playlist }}</a>
+						</li>
+					{% endfor %}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_playlist_new', {'id': membre.id}) }}">add new playlist</a>
+
+    <a href="{{ path('app_shared_playlist_new', {'id': membre.id}) }}">add new SHARED PLAYLIST</a>
+
+
+	<a href="{{ path('app_membre_index') }}">back to list</a>
+
+	<a href="{{ path('app_membre_edit', {'id': membre.id}) }}">edit</a>
+
+	{{ include('membre/_delete_form.html.twig') }}
+{% endblock %}

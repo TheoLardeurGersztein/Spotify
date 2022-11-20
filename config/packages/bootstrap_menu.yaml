@@ -3,8 +3,9 @@ bootstrap_menu:
     main:
       items:
         playlist:
-          label: 'Playlists'
-          route: 'app_playlist_index'
         music:
           label: 'Musics'
           route: 'app_music_index'
+        membre:
+          label: 'Membre'
+          route: 'app_membre_index'

@@ -6,6 +6,7 @@ use App\Entity\SharedPlaylist;
 use App\Form\SharedPlaylistType;
 use App\Repository\SharedPlaylistRepository;
 use App\Entity\Music;
+use App\Entity\Membre;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,16 +22,20 @@ class SharedPlaylistController extends AbstractController
     public function index(SharedPlaylistRepository $sharedPlaylistRepository): Response
     {
         return $this->render('shared_playlist/index.html.twig', [
-            'shared_playlists' => $sharedPlaylistRepository->findAll(),
+            'shared_playlists' => $sharedPlaylistRepository->findBy(['published' => true]),
         ]);
     }
 
-    #[Route('/new', name: 'app_shared_playlist_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SharedPlaylistRepository $sharedPlaylistRepository, EntityManagerInterface $entityManager): Response
+    /**
+     * @Route("/new/{id}", name="app_shared_playlist_new", methods={"GET", "POST"})
+    */
+    public function new(Request $request, SharedPlaylistRepository $sharedPlaylistRepository, EntityManagerInterface $entityManager, Membre $membre): Response
     {
         $sharedPlaylist = new SharedPlaylist();
+        $sharedPlaylist->setCreator($membre);
         $form = $this->createForm(SharedPlaylistType::class, $sharedPlaylist);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sharedPlaylistRepository->save($sharedPlaylist, true);
@@ -40,12 +45,13 @@ class SharedPlaylistController extends AbstractController
             // $this->addFlash() is equivalent to $request->getSession()->getFlashBag()->add()
             // or to $this->get('session')->getFlashBag()->add();
 
-            return $this->redirectToRoute('app_shared_playlist_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_shared_playlist_show', ['id' => $membre->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('shared_playlist/new.html.twig', [
             'shared_playlist' => $sharedPlaylist,
             'form' => $form,
+            'membre' => $membre,
         ]);
     }
 
@@ -86,6 +92,8 @@ class SharedPlaylistController extends AbstractController
         return $this->redirectToRoute('app_shared_playlist_index', [], Response::HTTP_SEE_OTHER);
     }
 
+
+    
     /**
      * @Route("/{shared_playlist_id}/music/{music_id}", name="app_shared_playlist_music_show", methods={"GET"})
      * @ParamConverter("sharedPlaylist", options={"id" = "shared_playlist_id"})
@@ -104,4 +112,7 @@ class SharedPlaylistController extends AbstractController
             'shared_playlist' => $sharedPlaylist,
         ]);
     }
+
+
+
 }

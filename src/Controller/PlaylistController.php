@@ -12,16 +12,26 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
-#[Route('/playlist')]
+/**
+ * @Route("/playlist")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
+ */
 class PlaylistController extends AbstractController
 {
     #[Route('/', name: 'app_playlist_index', methods: ['GET'])]
     public function index(PlaylistRepository $playlistRepository): Response
     {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $playlist = $playlistRepository->findAll();
+        } else {
+            $membre = $this->getUser()->getMembre();
+            $playlist = $membre->getPlaylists();
+        }
         return $this->render('playlist/index.html.twig', [
-            'playlists' => $playlistRepository->findAll(),
+            'playlists' => $playlist,
         ]);
     }
 
@@ -51,6 +61,11 @@ class PlaylistController extends AbstractController
     #[Route('/{id}', name: 'app_playlist_show', methods: ['GET'])]
     public function show(Playlist $playlist): Response
     {
+        $hasAccess = $this->isGranted('ROLE_ADMIN') ||
+            ($this->getUser()->getMembre() == $playlist->getMembre());
+        if(! $hasAccess) {
+            throw $this->createAccessDeniedException("You cannot access another member's [inventory]!");
+        }
         return $this->render('playlist/show.html.twig', [
             'playlist' => $playlist,
             'musics' => $playlist->getMusics(),
@@ -66,7 +81,7 @@ class PlaylistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $playlistRepository->save($playlist, true);
 
-            return $this->redirectToRoute('app_playlist_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_playlist_show', ['id' => $playlist->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('playlist/edit.html.twig', [
@@ -82,7 +97,7 @@ class PlaylistController extends AbstractController
             $playlistRepository->remove($playlist, true);
         }
 
-        return $this->redirectToRoute('app_membre_show', ['id' => $membre.getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_membre_index', [], Response::HTTP_SEE_OTHER);
     }
 
     /**

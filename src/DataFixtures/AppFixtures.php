@@ -8,25 +8,49 @@ use App\Entity\Album;
 use App\Entity\Playlist;
 use App\Entity\Genre;
 use App\Entity\Membre;
+use app\Entity\User;
 use App\Entity\SharedPlaylist;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements DependentFixtureInterface
 {
+
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+        ];
+    }
+
+
     public function load(ObjectManager $manager): void
     {
 
+/*
+        foreach ($user = $manager->getRepository(User::class) as [$name, $useremail] ) {
+            $membre = new Membre();
+            if ($useremail) {
+                $user = $manager->getRepository(User::class)->findOneByEmail($useremail);
+                $membre->setUser($user);
+            }
+            $membre->setName($name);
+            $manager->persist($membre);
+        }
+*/
 
         $theo = new Membre();
-        $theo->setNom('Théo');
+        $user1 = $manager->getRepository(User::class)->findOneByEmail('theo@localhost');
+        $theo->setuser($user1);
+        $theo->setNom('Theo');
         $manager->persist($theo);
-        
+
         $alex = new Membre();
+        $user1 = $manager->getRepository(User::class)->findOneByEmail('alex@localhost');
+        $alex->setuser($user1);
         $alex->setNom('Alex');
         $manager->persist($alex);
-        
-
 
 
         $likedSongs = new Playlist();

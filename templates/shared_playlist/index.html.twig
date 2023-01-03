@@ -1,37 +1,108 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SharedPlaylist index{% endblock %}
+{% block title %}SharedPlaylist index
+{% endblock %}
 
 {% block body %}
-    <h1>SharedPlaylist index</h1>
+	<h1>SharedPlaylist index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Description</th>
-                <th>Published</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for shared_playlist in shared_playlists %}
-            <tr>
-                <td>{{ shared_playlist.id }}</td>
-                <td>{{ shared_playlist.description }}</td>
-                <td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_shared_playlist_show', {'id': shared_playlist.id}) }}">show</a>
-                    <a href="{{ path('app_shared_playlist_edit', {'id': shared_playlist.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div>My Private Shared Playlists
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Description</th>
+					<th>Published</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for shared_playlist in my_private_shared_playlists %}
+					<tr>
+						<td>{{ shared_playlist.id }}</td>
+						<td>{{ shared_playlist.description }}</td>
+						<td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">You d'ont' have any private Shared Playlist</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 
-    <a href="{{ path('app_shared_playlist_new') }}">Create new</a>
+	<div>My Public Shared Playlists
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Description</th>
+					<th>Published</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for shared_playlist in my_public_shared_playlists %}
+					<tr>
+						<td>{{ shared_playlist.id }}</td>
+						<td>{{ shared_playlist.description }}</td>
+						<td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">You don't have any public Shared Playlist</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+    <div>Public Shared Playlists
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Description</th>
+					<th>Published</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for shared_playlist in public_shared_playlists %}
+					<tr>
+						<td>{{ shared_playlist.id }}</td>
+						<td>{{ shared_playlist.description }}</td>
+						<td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">No public Shared Playlists</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+    <div>Admin Section
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Description</th>
+					<th>Published</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for shared_playlist in admin_shared_playlists %}
+					<tr>
+						<td>{{ shared_playlist.id }}</td>
+						<td>{{ shared_playlist.description }}</td>
+						<td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="4">no admin</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 {% endblock %}

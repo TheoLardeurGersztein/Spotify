@@ -33,9 +33,9 @@
             <tr>
 				<th>SHARED Playlists</th>
 				<td>
-					{% for playlist in membre.sharedPlaylists %}
+					{% for shared_playlist in membre.sharedPlaylists %}
 						<li>
-							<a href="{{ path('app_shared_playlist_show', {'id' : playlist.id}) }}">{{ playlist }}</a>
+							<a href="{{ path('app_shared_playlist_show', {'id' : shared_playlist.id}) }}">{{ shared_playlist }}</a>
 						</li>
 					{% endfor %}
 				</td>
@@ -43,14 +43,13 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_playlist_new', {'id': membre.id}) }}">add new playlist</a>
-
-    <a href="{{ path('app_shared_playlist_new', {'id': membre.id}) }}">add new SHARED PLAYLIST</a>
-
-
-	<a href="{{ path('app_membre_index') }}">back to list</a>
-
-	<a href="{{ path('app_membre_edit', {'id': membre.id}) }}">edit</a>
-
+	<a href="{{ path('app_playlist_new', {'id': membre.id}) }}">Add new Playlist</a>
+	<br>
+    <a href="{{ path('app_shared_playlist_new', {'id': membre.id}) }}">Add new Shared Playlist</a>
+	<br>
+	<a href="{{ path('app_membre_index') }}">Back to Membres</a>
+	<br>
+	<a href="{{ path('app_membre_edit', {'id': membre.id}) }}">Edit Membre</a>
+	<br>
 	{{ include('membre/_delete_form.html.twig') }}
 {% endblock %}

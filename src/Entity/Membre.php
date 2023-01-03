@@ -27,6 +27,9 @@ class Membre
     #[ORM\OneToMany(mappedBy: 'creator', targetEntity: SharedPlaylist::class)]
     private Collection $sharedPlaylists;
 
+    #[ORM\OneToOne(mappedBy: 'membre', cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->playlists = new ArrayCollection();
@@ -126,6 +129,28 @@ class Membre
                 $sharedPlaylist->setCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setMembre(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getMembre() !== $this) {
+            $user->setMembre($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

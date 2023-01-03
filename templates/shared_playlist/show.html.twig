@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SharedPlaylist
-{% endblock %}
+{% block title %}shared_Playlist{% endblock %}
 
-
-{% block main %}
-	<h1>SharedPlaylist</h1>
+{% block body %}
+	<h1>shared_Playlist</h1>
 
 	<table class="table">
 		<tbody>
@@ -14,33 +12,32 @@
 				<td>{{ shared_playlist.id }}</td>
 			</tr>
 			<tr>
-				<th>Description</th>
+				<th>Name</th>
 				<td>{{ shared_playlist.description }}</td>
-			</tr>
-			<tr>
-				<th>Published</th>
-				<td>{{ shared_playlist.published ? 'Yes' : 'No' }}</td>
 			</tr>
 			<tr>
 				<th>Musics</th>
 				<td>
-					<ul>
-						{% for music in shared_playlist.musics %}
-							<li>
+					{% set i = 1 %}
+					{% for music in musics %}
+						<tr>
+							<th>{{ i }}</th>
+							<td>{{ music.title }}</td>
+							<td>
 								<a href="{{ path('app_shared_playlist_music_show', {'shared_playlist_id': shared_playlist.id, 'music_id' : music.id}) }}">{{ music }}</a>
-							</li>
-						{% endfor %}
-					</ul>
+							</td>
+						</tr>
+						{% set i = i+1 %}
+					{% endfor %}
+					{# todos #}
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
-	<a href="{{ path('app_membre_index') }}">back to list</a>
-
-	<a href="{{ path('app_shared_playlist_edit', {'id': shared_playlist.id}) }}">edit</a>
-
+	<a href="{{ path('app_membre_show', {'id': shared_playlist.creator.id}) }}">Shared Playlists</a>
+	<br>
+	<a href="{{ path('app_shared_playlist_edit', {'id': shared_playlist.id}) }}">Edit This Shared Playlist</a>
+	<br>
 	{{ include('shared_playlist/_delete_form.html.twig') }}
-
-
 {% endblock %}

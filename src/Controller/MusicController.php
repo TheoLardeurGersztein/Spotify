@@ -9,15 +9,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-#[Route('/music')]
+/**
+ * @Route("/music")
+ * @IsGranted("IS_AUTHENTICATED_FULLY")
+ */
 class MusicController extends AbstractController
 {
     #[Route('/', name: 'app_music_index', methods: ['GET'])]
     public function index(MusicRepository $musicRepository): Response
     {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $music = $musicRepository->findAll();
+        } else {
+            $music = $musicRepository->findAll();
+        }
+/*        else {
+            $membre = $this->getUser()->getMembre();
+            $music = $musicRepository->findMembreMusic($membre);
+        } */
         return $this->render('music/index.html.twig', [
-            'music' => $musicRepository->findAll(),
+            'music' => $music,
         ]);
     }
 

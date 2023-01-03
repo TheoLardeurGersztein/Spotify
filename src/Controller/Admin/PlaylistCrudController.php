@@ -32,9 +32,11 @@ class PlaylistCrudController extends AbstractCrudController
         return [
             'name',
             AssociationField::new('musics')->setCrudController(MusicCrudController::class),
+            AssociationField::new('membre'),
             AssociationField::new('musics')
                   ->onlyOnDetail()
                   ->setTemplatePath('admin/fields/playlist_music.html.twig')
+            
 
         ];
         

@@ -7,7 +7,7 @@
 
     {{ include('playlist/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_playlist_index') }}">back to list</a>
+    <a href="{{ path('app_playlist_show', {'id': playlist.id}) }}">back to list</a>
 
     {{ include('playlist/_delete_form.html.twig') }}
 {% endblock %}

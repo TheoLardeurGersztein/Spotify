@@ -39,6 +39,20 @@ class MusicRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Music[] Returns an array of [Objet] objects for a member
+     */
+    public function findMembreMusic(Membre $membre): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.playlist', 'i')
+            ->andWhere('i.owner = :membre')
+            ->setParameter('membre', $membre)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Music[] Returns an array of Music objects
 //     */

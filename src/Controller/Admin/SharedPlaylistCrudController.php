@@ -35,38 +35,40 @@ class SharedPlaylistCrudController extends AbstractCrudController
     return [
         AssociationField::new('creator'),
         BooleanField::new('published')
-        ->onlyOnForms(),
+            ->onlyOnForms(),
         TextField::new('description'),
-
+        AssociationField::new('musics')->setCrudController(MusicCrudController::class),
         AssociationField::new('musics')
-        ->onlyOnForms()
-        // on ne souhaite pas gérer l'association entre les
-        // [objets] et la [galerie] dès la crétion de la
-        // [galerie]
-        ->hideWhenCreating()
-        ->setTemplatePath('admin/fields/playlist_music.html.twig')
-        // Ajout possible seulement pour des [objets] qui
-        // appartiennent même propriétaire de l'[inventaire]
-        // que le [createur] de la [galerie]
-        ->setQueryBuilder(
-            function (QueryBuilder $queryBuilder) {
-            // récupération de l'instance courante de [galerie]
-            $currentSharedPlaylist = $this->getContext()->getEntity()->getInstance();
-            $creator = $currentSharedPlaylist->getCreator();
-            $memberId = $creator->getId();
-            // charge les seuls [objets] dont le 'owner' de l'[inventaire] est le [createur] de la galerie
-            $queryBuilder->leftJoin('entity.playlist', 'i')
-                ->leftJoin('i.owner', 'm')
-                ->andWhere('m.id = :member_id')
-                ->setParameter('member_id', $memberId);    
-            return $queryBuilder;
+            ->onlyOnDetail()
+            ->setTemplatePath('admin/fields/playlist_music.html.twig'),
+
+/*
+        AssociationField::new('musics')
+            ->onlyOnForms()
+            // on ne souhaite pas gérer l'association entre les
+            // [objets] et la [galerie] dès la crétion de la
+            // [galerie]
+            ->hideWhenCreating()
+            ->setTemplatePath('admin/fields/playlist_music.html.twig')
+            // Ajout possible seulement pour des [objets] qui
+            // appartiennent même propriétaire de l'[inventaire]
+            // que le [createur] de la [galerie]
+            ->setQueryBuilder(
+                function (QueryBuilder $queryBuilder) {
+                // récupération de l'instance courante de [galerie]
+                $currentSharedPlaylist = $this->getContext()->getEntity()->getInstance();
+                $creator = $currentSharedPlaylist->getCreator();
+                $membreId = $creator->getId();
+                // charge les seuls [objets] dont le 'owner' de l'[inventaire] est le [createur] de la galerie
+                $queryBuilder->leftJoin('entity.playlist', 'i')
+                    ->leftJoin('i.owner', 'm')
+                    ->andWhere('m.id = :membre_id')
+                    ->setParameter('membre_id', $membreId);    
+                return $queryBuilder;
             }
            ),
-           AssociationField::new('musics')->setCrudController(MusicCrudController::class),
-            AssociationField::new('musics')
-                  ->onlyOnDetail()
-                  ->setTemplatePath('admin/fields/playlist_music.html.twig')
-
+           
+                  */
         ];
     }
 }

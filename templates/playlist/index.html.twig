@@ -10,7 +10,6 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
@@ -18,10 +17,6 @@
             <tr>
                 <td>{{ playlist.id }}</td>
                 <td>{{ playlist.name }}</td>
-                <td>
-                    <a href="{{ path('app_playlist_show', {'id': playlist.id}) }}">show</a>
-                    <a href="{{ path('app_playlist_edit', {'id': playlist.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>
@@ -30,6 +25,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_playlist_new') }}">Create new</a>
 {% endblock %}
